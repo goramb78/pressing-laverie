@@ -1,0 +1,22 @@
+<h2>Nouvelle commande</h2>
+<a routerLink="/mes-tickets">← Retour à mes commandes</a>
+
+<p *ngIf="loading()">Chargement du catalogue...</p>
+
+<div *ngFor="let service of services()">
+  <span>{{ service.libelle }} — {{ service.prix_unitaire }} FCFA</span>
+  <input
+    type="number"
+    min="0"
+    [value]="quantitePour(service)"
+    (change)="changerQuantite(service, +$any($event.target).value)"
+  >
+</div>
+
+<p *ngIf="errorMessage()">{{ errorMessage() }}</p>
+
+<p><strong>Total : {{ total() }} FCFA</strong></p>
+
+<button (click)="deposerCommande()" [disabled]="submitting()">
+  {{ submitting() ? 'Envoi...' : 'Déposer la commande' }}
+</button>

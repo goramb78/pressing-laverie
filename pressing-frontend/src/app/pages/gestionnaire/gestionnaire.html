@@ -1,0 +1,48 @@
+<h2>Espace gestionnaire</h2>
+<button (click)="logout()">Se déconnecter</button>
+<a routerLink="/gestionnaire/services">Gérer les services</a>
+<a routerLink="/gestionnaire/statistiques">Statistiques</a>
+
+<p *ngIf="loading()">Chargement...</p>
+
+<table border="1" cellpadding="6" *ngIf="!loading()">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Client</th>
+      <th>Date</th>
+      <th>Services</th>
+      <th>Total</th>
+      <th>Statut</th>
+      <th>Paiement</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ticket of tickets()">
+      <td>{{ ticket.id }}</td>
+      <td>{{ ticket.user?.name }}<br>{{ ticket.user?.email }}</td>
+      <td>{{ ticket.date_recu | date:'dd/MM/yyyy HH:mm' }}</td>
+      <td>
+        <div *ngFor="let item of ticket.items">
+          {{ item.service.libelle }} × {{ item.quantite }}
+        </div>
+      </td>
+      <td>{{ ticket.montant_total }} FCFA</td>
+      <td>{{ statutLabel(ticket.statut) }}</td>
+      <td>
+        <span *ngIf="ticket.payment">✅ {{ ticket.payment.date_paiement | date:'dd/MM/yyyy' }}</span>
+        <div *ngIf="!ticket.payment">
+          <input type="number" placeholder="Montant" [(ngModel)]="montants[ticket.id]" name="montant-{{ticket.id}}" style="width: 80px;">
+          <button (click)="payer(ticket)">Payer</button>
+        </div>
+      </td>
+      <td>
+        <button *ngIf="ticket.statut === 'recu'" (click)="changerStatut(ticket, 'en_traitement')">En traitement</button>
+        <button *ngIf="ticket.statut === 'en_traitement'" (click)="changerStatut(ticket, 'pret')">Prêt</button>
+        <button *ngIf="ticket.statut === 'pret'" (click)="changerStatut(ticket, 'recupere')">Récupéré</button>
+        <button *ngIf="ticket.statut === 'recu' || ticket.statut === 'en_traitement'" (click)="annuler(ticket)">Annuler</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

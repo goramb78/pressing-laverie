@@ -1,0 +1,19 @@
+<h2>Statistiques</h2>
+<a routerLink="/gestionnaire">← Retour aux commandes</a>
+
+<div *ngIf="daily()">
+  <h3>Aujourd'hui</h3>
+  <p>Tickets créés : {{ daily()!.tickets_created_today }}</p>
+  <p>Tickets récupérés : {{ daily()!.tickets_completed_today }}</p>
+  <p>Recette du jour : {{ daily()!.revenue_today }} FCFA</p>
+</div>
+
+<h3>Nombre de tickets par mois</h3>
+<div style="max-width: 500px;">
+  <canvas baseChart [data]="ticketsPerMonthData()" [options]="chartOptions" type="bar"></canvas>
+</div>
+
+<h3>Chiffre d'affaires par service</h3>
+<div style="max-width: 400px;">
+  <canvas baseChart [data]="revenuePerServiceData()" [options]="chartOptions" type="pie"></canvas>
+</div>

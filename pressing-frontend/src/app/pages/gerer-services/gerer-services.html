@@ -1,0 +1,36 @@
+<h2>Gérer les services</h2>
+<a routerLink="/gestionnaire">← Retour aux commandes</a>
+
+<h3>Ajouter un service</h3>
+<div>
+  <input type="text" placeholder="Libellé" [(ngModel)]="nouveauLibelle" name="libelle">
+  <input type="text" placeholder="Description (optionnel)" [(ngModel)]="nouvelleDescription" name="description">
+  <input type="number" placeholder="Prix unitaire" [(ngModel)]="nouveauPrix" name="prix">
+  <button (click)="ajouter()">Ajouter</button>
+</div>
+
+<h3>Liste des services</h3>
+<p *ngIf="loading()">Chargement...</p>
+
+<table border="1" cellpadding="6" *ngIf="!loading()">
+  <thead>
+    <tr>
+      <th>Libellé</th>
+      <th>Description</th>
+      <th>Prix unitaire</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let service of services()">
+      <td>{{ service.libelle }}</td>
+      <td>{{ service.description || '—' }}</td>
+      <td>{{ service.prix_unitaire }} FCFA</td>
+      <td>{{ service.actif ? 'Actif' : 'Archivé' }}</td>
+      <td>
+        <button *ngIf="service.actif" (click)="archiver(service)">Archiver</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

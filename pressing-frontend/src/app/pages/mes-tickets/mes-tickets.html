@@ -1,0 +1,37 @@
+<h2>Mes commandes</h2>
+<button (click)="logout()">Se déconnecter</button>
+<a routerLink="/nouvelle-commande">+ Nouvelle commande</a>
+
+<p *ngIf="loading()">Chargement...</p>
+
+<p *ngIf="!loading() && tickets().length === 0">Vous n'avez encore aucune commande.</p>
+
+<table border="1" cellpadding="6" *ngIf="!loading() && tickets().length > 0">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Date</th>
+      <th>Services</th>
+      <th>Total</th>
+      <th>Statut</th>
+      <th>Paiement</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ticket of tickets()">
+      <td>{{ ticket.id }}</td>
+      <td>{{ ticket.date_recu | date:'dd/MM/yyyy HH:mm' }}</td>
+      <td>
+        <div *ngFor="let item of ticket.items">
+          {{ item.service.libelle }} × {{ item.quantite }} = {{ item.sous_total }} FCFA
+        </div>
+      </td>
+      <td>{{ ticket.montant_total }} FCFA</td>
+      <td>{{ statutLabel(ticket.statut) }}</td>
+      <td>
+        <span *ngIf="ticket.payment">✅ {{ ticket.payment.date_paiement | date:'dd/MM/yyyy' }}</span>
+        <span *ngIf="!ticket.payment">Non payé</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
